@@ -1,0 +1,25 @@
+1. Trong thread.c
+ - them thu vien /fixed_point.h
+ - them bien load_avg co cau truc fixed_t (global)
+ - them initial bien load_avg va dua n thanh fixed_point (thread_start())
+ - implement get_nice,set_nice func (thread_get_nice,thread_set_nice)
+ - repair set_priority func(thread_get_priority)
+ - repair get_load_avg func(thread_get_load_avg)
+ - implement function (thread_mlfqs_increase_recent_cpu_by_one),(thread_mlfqs_update_priority),(thread_mlfqs_update_load_avg_and_recent_cpu)
+ - insert func " list_insert_ordered to (thread_unblock)
+ - // get load_avg co the sai
+2. Trong fixed_point.h
+ - implement formula that was given by the intruction in order to covert into fixed-point-number
+3. Trong thread.h
+ - define 
+4. Trong timer.c 
+ - recalculate load_avg, recent_cpu of all threads, priority every 1 sec (timer_intertupt())
+ - recalculate priority of all threads every 4th ticks (timer_intertupt())
+ - reconfig func timer_sleep()
+5. Trong synch.c
+ - insert func "list_sort (&cond->waiters, cond_sema_cmp_priority, NULL);" to sema_up(), cond_signal(),
+ - insert func " list_insert_ordered (&sema->waiters, &thread_current ()->elem, thread_cmp_priority, NULL);" to sema_down()
+ - implement func cond_sema_cmp_priority() 
+ - 
+6. Trong synch.h
+ - define cond_sema_cmp_priority
