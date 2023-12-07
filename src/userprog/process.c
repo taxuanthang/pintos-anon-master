@@ -38,10 +38,44 @@ process_execute (const char *file_name)
     return TID_ERROR;
   strlcpy (fn_copy, file_name, PGSIZE);
 
+  char *cmd_name = (char *) malloc(strlen(file_name)+1);
+  if (cmd_name == NULL){
+    palloc_free_page(fn_copy);
+    return TID_ERROR;
+  }
+  memcpy(cmd_name, file_name, strlen(file_name) + 1);
+
+  char *saveptr;
+  cmd_name = strtok_r(cmd_name, " ", &saveptr);
+
   /* Create a new thread to execute FILE_NAME. */
-  tid = thread_create (file_name, PRI_DEFAULT, start_process, fn_copy);
+  tid = thread_create (cmd_name, PRI_DEFAULT, start_process, fn_copy);
+  free(cmd_name);
   if (tid == TID_ERROR)
-    palloc_free_page (fn_copy); 
+    palloc_free_page (fn_copy);
+  else
+  {
+    // Wait for child to load. Child ups the sema after loading
+    // Also, child leaves message to parent thread
+    struct thread *curr = thread_current();
+    sema_down(&curr->child_load_lock);
+    struct child *ch;
+    struct list_elem *e;
+    for (e = list_begin(&curr->child_processes);
+          e != list_end(&curr->child_processes);
+          e = list_next(e))
+    {
+      ch = list_entry(e, struct child, child_elem);
+      if (ch->tid == tid){
+        if (!ch->load_success)
+        {
+          free(ch);
+          return TID_ERROR;
+        }
+        break;
+      }
+    }
+  }
   return tid;
 }
 

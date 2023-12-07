@@ -1,0 +1,69 @@
+I.Threads/Advanced Scheduler
+1. Trong thread.c
+ - them thu vien /fixed_point.h
+ - them bien load_avg co cau truc fixed_t (global)
+ - them initial bien load_avg va dua n thanh fixed_point (thread_start())
+ - implement get_nice,set_nice func (thread_get_nice,thread_set_nice)
+ - repair set_priority func(thread_get_priority)
+ - repair get_load_avg func(thread_get_load_avg)
+ - implement function (thread_mlfqs_increase_recent_cpu_by_one),(thread_mlfqs_update_priority),(thread_mlfqs_update_load_avg_and_recent_cpu)
+ - insert func " list_insert_ordered to (thread_unblock)
+ - // get load_avg co the sai
+2. Trong fixed_point.h
+ - implement formula that was given by the intruction in order to covert into fixed-point-number
+3. Trong thread.h
+ - define 
+4. Trong timer.c 
+ - recalculate load_avg, recent_cpu of all threads, priority every 1 sec (timer_intertupt())
+ - recalculate priority of all threads every 4th ticks (timer_intertupt())
+ - reconfig func timer_sleep()
+5. Trong synch.c
+ - insert func "list_sort (&cond->waiters, cond_sema_cmp_priority, NULL);" to sema_up(), cond_signal(),
+ - insert func " list_insert_ordered (&sema->waiters, &thread_current ()->elem, thread_cmp_priority, NULL);" to sema_down()
+ - implement func cond_sema_cmp_priority() 
+ - 
+6. Trong synch.h
+ - define cond_sema_cmp_priority
+ 
+II. User Programs/ Argument Passing
+1. Trong process.c
+ - edit process_execute 
+ // khoi tao va cap phat bo nho cho cmd_name,copy gia tri cua file_name
+   char *cmd_name = (char *) malloc(strlen(file_name)+1);
+  if (cmd_name == NULL){
+    palloc_free_page(fn_copy);
+    return TID_ERROR;
+  }
+  memcpy(cmd_name, file_name, strlen(file_name) + 1);
+  
+  /* tach tu trong cmd_name va luu tu cuoi cung trong con tro saveptr*/
+  char *saveptr;
+  cmd_name = strtok_r(cmd_name, " ", &saveptr);
+  
+  /* Tiến trình cha chờ đến khi tiến trình con hoàn tất quá trình tải chương trình.
+child_load_lock là một semaphore được sử dụng để đồng bộ hóa giữa tiến trình cha và con.
+Tiến trình cha kiểm tra kết quả của quá trình tải chương trình của tiến trình con thông qua load_success trong biến struct child.
+Nếu tiến trình con không tải thành công, hàm trả về TID_ERROR.
+Lưu ý rằng child_load_lock được sử dụng để đảm bảo rằng tiến trình cha và con không cần phải kiểm tra liên tục xem tiến trình con đã hoàn tất tải chương trình hay chưa. Nó giúp tránh tình trạng đua độc chiếm và đồng bộ hóa giữa các tiến trình.*/
+    {
+    // Wait for child to load. Child ups the sema after loading
+    // Also, child leaves message to parent thread
+    struct thread *curr = thread_current();
+    sema_down(&curr->child_load_lock);
+    struct child *ch;
+    struct list_elem *e;
+    for (e = list_begin(&curr->child_processes);
+          e != list_end(&curr->child_processes);
+          e = list_next(e))
+    {
+      ch = list_entry(e, struct child, child_elem);
+      if (ch->tid == tid){
+        if (!ch->load_success)
+        {
+          free(ch);
+          return TID_ERROR;
+        }
+        break;
+      }
+    }
+
