@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
+
 
 /* Reads and returns a byte from PORT. */
 static inline uint8_t

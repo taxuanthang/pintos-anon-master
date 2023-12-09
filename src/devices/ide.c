@@ -187,7 +187,6 @@ reset_channel (struct channel *c)
       present[dev_no] = (inb (reg_nsect (c)) == 0x55
                          && inb (reg_lbal (c)) == 0xaa);
     }
-
   /* Issue soft reset sequence, which selects device 0 as a side effect.
      Also enable interrupts. */
   outb (reg_ctl (c), 0);
@@ -195,7 +194,6 @@ reset_channel (struct channel *c)
   outb (reg_ctl (c), CTL_SRST);
   timer_usleep (10);
   outb (reg_ctl (c), 0);
-
   timer_msleep (150);
 
   /* Wait for device 0 to clear BSY. */

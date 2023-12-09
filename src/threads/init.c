@@ -93,12 +93,10 @@ main (void)
   /* Greet user. */
   printf ("Pintos booting with %'"PRIu32" kB RAM...\n",
           init_ram_pages * PGSIZE / 1024);
-
   /* Initialize memory system. */
   palloc_init (user_page_limit);
   malloc_init ();
   paging_init ();
-
   /* Segmentation. */
 #ifdef USERPROG
   tss_init ();
@@ -122,9 +120,9 @@ main (void)
 
 #ifdef FILESYS
   /* Initialize file system. */
-  ide_init ();
-  locate_block_devices ();
-  filesys_init (format_filesys);
+  ide_init ();             //sthing here
+  locate_block_devices (); //sthing here
+  filesys_init (format_filesys); //sthing here
 #endif
 
   printf ("Boot complete.\n");
