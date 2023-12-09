@@ -50,6 +50,14 @@ II. User Programs/ Argument Passing
   +  implement way to store word into argv
   + fix file_name = argv[0]
   
+ - trong pintos ln 621 
+  + push (@cmd, '-drive', 'file=' . $disks[0].',format=raw') if defined $disks[0];
+push (@cmd, '-drive', 'file=' . $disks[1].',format=raw') if defined $disks[1];
+push (@cmd, '-drive', 'file=' . $disks[2].',format=raw') if defined $disks[2];
+push (@cmd, '-drive', 'file=' . $disks[3].',format=raw') if defined $disks[3];
+
+ 
+  
   
 
 
