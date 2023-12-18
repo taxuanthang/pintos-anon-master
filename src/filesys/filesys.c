@@ -7,6 +7,9 @@
 #include "filesys/inode.h"
 #include "filesys/directory.h"
 
+/* Partition that contains the file system. */
+struct block *fs_device;
+
 static void do_format (void);
 
 /* Initializes the file system module.

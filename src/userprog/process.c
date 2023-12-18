@@ -515,7 +515,7 @@ setup_stack (void **esp, char **argv, int argc)
 
   free(inStack);
   //printf("Hi from setup_stack\n");
-  //hex_dump((uintptr_t) *esp, *esp, 200, true);
+  hex_dump((uintptr_t) *esp, *esp, 100, true);
   return success;
   
 }
