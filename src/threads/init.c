@@ -120,9 +120,9 @@ main (void)
 
 #ifdef FILESYS
   /* Initialize file system. */
-  ide_init ();             //sthing here
-  locate_block_devices (); //sthing here
-  filesys_init (format_filesys); //sthing here
+  ide_init ();
+  locate_block_devices ();
+  filesys_init (format_filesys);
 #endif
 
   printf ("Boot complete.\n");
