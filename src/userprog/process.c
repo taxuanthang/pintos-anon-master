@@ -103,7 +103,7 @@ int
 process_wait (tid_t child_tid UNUSED) 
 {
   while(1){
-  }//may be to be removed?
+  }
   return -1;
 }
 
