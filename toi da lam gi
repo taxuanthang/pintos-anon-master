@@ -23,3 +23,7 @@
  - 
 6. Trong synch.h
  - define cond_sema_cmp_priority
+ 
+ The first version blocks the thread, allowing it to be scheduled out, while the second version actively waits by repeatedly yielding the CPU.
+The first version is generally more efficient as it doesn't consume CPU resources during the sleep period. The second version, on the other hand, actively consumes CPU cycles while waiting.
+The first version allows the sleeping thread to be woken up by external events, whereas the second version relies solely on busy-waiting.
